@@ -1,0 +1,11 @@
+{
+  "name": "app-saego",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "node ./js/server.js"
+  },
+  "dependencies": {
+    "connect": "^3.7.0",
+    "serve-static": "^1.15.0"
+  }
+}

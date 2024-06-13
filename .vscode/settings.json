@@ -1,0 +1,21 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.yalc": true,
+    "**/*.pyc": {
+      "when": "$(basename).py"
+    },
+    "**/__pycache__": true,
+    "**/.idea": true,
+    "**/node_modules": true,
+    "**/.next": true
+  },
+  "editor.showUnused": true,
+  "[typescript]": {
+    "editor.showUnused": true
+ },
+}
