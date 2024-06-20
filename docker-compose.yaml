@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  app:
+    image: registry.gitlab.com/lema_ufpb/projetos/apps/app-saego
+    container_name: app-saego
+    hostname: saego
+    ports:
+      - "3001:3000"
+    restart: "unless-stopped"
+networks: 
+  default: 
+    external: 
+      name: production 

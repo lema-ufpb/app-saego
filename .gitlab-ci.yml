@@ -1,0 +1,52 @@
+# Pipeline stages
+stages:
+  - Build Docker Image
+  - Deploy Docker Container
+
+variables:
+  VERSION: "v1.0"
+
+build-image:
+  stage: "Build Docker Image"
+  image: docker:26.1.4-dind-alpine3.20
+  services:
+    - docker:dind
+  before_script:
+    - echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  script:
+    - |
+      docker pull $CI_REGISTRY_IMAGE:latest || true
+      docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$VERSION --tag $CI_REGISTRY_IMAGE:latest .
+      docker push $CI_REGISTRY_IMAGE:$VERSION
+      docker push $CI_REGISTRY_IMAGE:latest
+  tags:
+    - padrao
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+
+deploy:
+  stage: "Deploy Docker Container"
+  image: docker:26.1.4-dind-alpine3.20
+  services:
+    - docker:dind
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $CI_SERVER_HOST > ~/.ssh/known_hosts
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+    - chmod 644 ~/.ssh/known_hosts
+    -  '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - |
+      scp docker-compose.yaml $SSH_DOCKER_HOST:/home/lema/.apps/
+      ssh $SSH_DOCKER_HOST "cd /home/lema/.apps/ && echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY && docker-compose up -d"
+  tags:
+    - padrao
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always

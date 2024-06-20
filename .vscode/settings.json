@@ -17,5 +17,16 @@
   "editor.showUnused": true,
   "[typescript]": {
     "editor.showUnused": true
- },
+},
+"cSpell.words": [
+  "dind",
+  "dockerenv",
+  "googlebot",
+  "keyscan",
+  "noimageindex",
+  "padrao",
+  "Saego",
+  "yandex",
+  "yandex-verification"
+],
 }
