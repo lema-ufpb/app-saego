@@ -2,7 +2,7 @@
   "name": "app-saego",
   "version": "0.1.0",
   "scripts": {
-    "dev": "node ./js/server.js"
+    "server": "node ./js/server.js"
   },
   "dependencies": {
     "connect": "^3.7.0",

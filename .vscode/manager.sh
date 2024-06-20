@@ -18,6 +18,6 @@ eval set -- "$PARAMS"
 
 if [ "$PARAMS" == "Run APP - NodeJS Enviroment" ]; then
   echo "Run APP - NodeJS Enviroment"
-  npm run dev
+  npm run server
 fi
 
