@@ -43,8 +43,8 @@ deploy:
     -  '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - |
-      scp docker-compose.yaml $SSH_DOCKER_HOST:/home/lema/.apps/
-      ssh $SSH_DOCKER_HOST "cd /home/lema/.apps/ && echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY && docker-compose up -d"
+      scp docker-compose.yaml $SSH_DOCKER_HOST:/home/lema/.apps/app-saego
+      ssh $SSH_DOCKER_HOST "cd /home/lema/.apps/app-saego && echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY && docker-compose up -d"
   tags:
     - padrao
   rules:
