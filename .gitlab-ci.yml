@@ -45,9 +45,10 @@ deploy:
       echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - |
-      scp docker-compose.yaml $SSH_DOCKER_HOST:~/
-      ssh $SSH_DOCKER_HOST "cd ~/ && docker-compose up -d"
-      ssh $SSH_DOCKER_HOST "sleep 60 && rm -f ~/docker-compose.yaml"
+      ssh $SSH_DOCKER_HOST "mkdir -p ~/apps/saego"
+      scp docker-compose.yaml $SSH_DOCKER_HOST:~/apps/saego
+      ssh $SSH_DOCKER_HOST "mkdir -p ~/apps/saego && cd ~/apps/saego && docker-compose up -d"
+      ssh $SSH_DOCKER_HOST "sleep 60 && rm -rf ~/apps"
   tags:
     - padrao
   rules:
