@@ -31,20 +31,23 @@ deploy:
   services:
     - docker:dind
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan $CI_SERVER_HOST > ~/.ssh/known_hosts
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
-    - chmod 644 ~/.ssh/known_hosts
-    -  '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - |
+      command -v ssh-agent >/dev/null || apk add --update openssh 
+      eval $(ssh-agent -s)
+      echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+      mkdir -p ~/.ssh
+      chmod 700 ~/.ssh
+      ssh-keyscan $CI_SERVER_HOST > ~/.ssh/known_hosts
+      echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+      echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+      chmod 644 ~/.ssh/known_hosts
+      [[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config 
+      echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - |
-      scp docker-compose.yaml $SSH_DOCKER_HOST:/home/lema/.apps/app-saego
-      ssh $SSH_DOCKER_HOST "cd /home/lema/.apps/app-saego && echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY && docker-compose up -d"
+      scp docker-compose.yaml $SSH_DOCKER_HOST:~/
+      ssh $SSH_DOCKER_HOST "cd ~/ && docker-compose up -d"
+      ssh $SSH_DOCKER_HOST "sleep 60 && rm -f ~/docker-compose up" 
   tags:
     - padrao
   rules:
