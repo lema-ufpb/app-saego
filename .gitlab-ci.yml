@@ -47,7 +47,7 @@ deploy:
     - |
       scp docker-compose.yaml $SSH_DOCKER_HOST:~/
       ssh $SSH_DOCKER_HOST "cd ~/ && docker-compose up -d"
-      ssh $SSH_DOCKER_HOST "sleep 60 && rm -f ~/docker-compose up" 
+      ssh $SSH_DOCKER_HOST "sleep 60 && rm -f ~/docker-compose.yaml"
   tags:
     - padrao
   rules:
