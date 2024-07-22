@@ -4,7 +4,7 @@ stages:
   - Deploy Docker Container
 
 variables:
-  VERSION: "v1.0"
+  VERSION: "v1.1"
 
 build-image:
   stage: "Build Docker Image"

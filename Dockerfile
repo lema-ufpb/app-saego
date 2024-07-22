@@ -1,6 +1,6 @@
 # base image
 FROM node:21.1-alpine3.17
-LABEL Description="Imagem NodeJS App" Vendor="LEMA-UFPB <contato@lema.ufpb.br>" Version="1.0"
+LABEL Description="Imagem NodeJS App" Vendor="LEMA-UFPB <contato@lema.ufpb.br>" Version="1.1"
 
 USER root 
 RUN apk update && apk upgrade --no-cache

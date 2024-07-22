@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   app:
-    image: registry.gitlab.com/lema_ufpb/projetos/apps/app-saego
+    image: registry.gitlab.com/lema_ufpb/projetos/apps/app-saego:v1.1
     container_name: app-saego
     hostname: saego
     ports:
