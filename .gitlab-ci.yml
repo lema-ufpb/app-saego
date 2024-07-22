@@ -42,11 +42,11 @@ deploy:
       echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
       chmod 644 ~/.ssh/known_hosts
       [[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config 
-      echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - |
       ssh $SSH_DOCKER_HOST "mkdir -p ~/apps/saego"
       scp docker-compose.yaml $SSH_DOCKER_HOST:~/apps/saego
+      ssh $SSH_DOCKER_HOST "echo -n $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY"
       ssh $SSH_DOCKER_HOST "cd ~/apps/saego && docker-compose up -d"
       ssh $SSH_DOCKER_HOST "sleep 60 && rm -rf ~/apps"
   tags:
