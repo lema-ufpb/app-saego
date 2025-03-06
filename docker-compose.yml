@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    container_name: app-saego
+    hostname: saego
+    restart: "unless-stopped"
+    networks:
+      - production
+networks:
+  production:

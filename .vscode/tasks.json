@@ -2,25 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run APP",
-      "type": "shell",
-      "command": "bash",
-      "args": [
-        ".vscode/manager.sh",
-        "-a",
-        "${input:componentType}"
-      ]
-    }
-  ],
-  "inputs": [
-    {
-      "type": "pickString",
-      "id": "componentType",
-      "description": "Choose an option:",
-      "options": [
-        "Run APP - NodeJS Enviroment",
-      ],
-      "default": "Run APP - NodeJS Enviroment"
+      "label": "Run Server",
+      "type": "npm",
+      "script": "server",
+      "isBackground": true, 
+      "problemMatcher": []
     }
   ]
 }

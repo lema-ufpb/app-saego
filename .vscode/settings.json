@@ -19,8 +19,12 @@
     "editor.showUnused": true
 },
 "cSpell.words": [
+  "addgroup",
+  "adduser",
+  "buildx",
   "dind",
   "dockerenv",
+  "github",
   "googlebot",
   "keyscan",
   "noimageindex",
@@ -28,6 +32,7 @@
   "padrao",
   "saego",
   "Saego",
+  "ufpb",
   "yandex",
   "yandex-verification"
 ],

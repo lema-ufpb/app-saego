@@ -1,27 +1,31 @@
-# base image
-FROM node:21.1-alpine3.17
-LABEL Description="Imagem NodeJS App" Vendor="LEMA-UFPB <contato@lema.ufpb.br>" Version="1.1"
-
-USER root 
-RUN apk update && apk upgrade --no-cache
-
-RUN adduser --shell /sbin/nologin --disabled-password \
-    --uid 5000 --ingroup root app-user
+FROM node:21.1-alpine3.17 AS builder
 
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-COPY ./package.json /app
-COPY ./index.html /app
-COPY ./css /app/css
-COPY ./img /app/img
-COPY ./js /app/js
-COPY ./.npmrc /app
+COPY ./index.html ./
+COPY ./css ./css
+COPY ./img ./img
+COPY ./js ./js
+COPY ./.npmrc ./
 
-RUN npm install 
+RUN addgroup -S app_group && adduser -S app_user -G app_group
 
-USER app-user
+FROM node:21.1-alpine3.17 AS runner
+
+WORKDIR /app
+RUN addgroup -S app_group && adduser -S app_user -G app_group
+RUN chown -R app_user:app_group /app
+
+COPY --from=builder --chown=app_user:app_group /app/node_modules ./node_modules
+COPY --from=builder --chown=app_user:app_group /app/index.html ./
+COPY --from=builder --chown=app_user:app_group /app/css ./css
+COPY --from=builder --chown=app_user:app_group /app/img ./img
+COPY --from=builder --chown=app_user:app_group /app/js ./js
+
+
+USER app_user
 
 EXPOSE 3000
-CMD npm run server
-
-
+CMD ["npm", "run", "server"]
