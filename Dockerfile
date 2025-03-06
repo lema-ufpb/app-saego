@@ -1,4 +1,4 @@
-FROM node:21.1-alpine3.17 AS runner
+FROM node:21.1-alpine3.17
 
 USER root 
 RUN apk update && apk upgrade --no-cache
