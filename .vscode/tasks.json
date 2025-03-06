@@ -5,7 +5,16 @@
       "label": "Run Server",
       "type": "npm",
       "script": "server",
-      "isBackground": true, 
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": [],
+      "dependsOn": "Install packages"
+    },
+    {
+      "label": "Install packages",
+      "type": "shell",
+      "command": "npm install",
+      "group": "build",
       "problemMatcher": []
     }
   ]
