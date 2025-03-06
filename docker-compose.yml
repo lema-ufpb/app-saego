@@ -4,6 +4,8 @@ services:
     container_name: app-saego
     hostname: saego
     restart: "unless-stopped"
+    ports:
+      - "3000:3000"
     networks:
       - production
 networks:

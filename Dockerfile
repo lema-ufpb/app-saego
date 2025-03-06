@@ -1,29 +1,22 @@
-FROM node:21.1-alpine3.17 AS builder
-
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
-
-COPY ./index.html ./
-COPY ./css ./css
-COPY ./img ./img
-COPY ./js ./js
-COPY ./.npmrc ./
-
-RUN addgroup -S app_group && adduser -S app_user -G app_group
-
 FROM node:21.1-alpine3.17 AS runner
 
-WORKDIR /app
+USER root 
+RUN apk update && apk upgrade --no-cache
+
 RUN addgroup -S app_group && adduser -S app_user -G app_group
+
+WORKDIR /app
+
 RUN chown -R app_user:app_group /app
 
-COPY --from=builder --chown=app_user:app_group /app/node_modules ./node_modules
-COPY --from=builder --chown=app_user:app_group /app/index.html ./
-COPY --from=builder --chown=app_user:app_group /app/css ./css
-COPY --from=builder --chown=app_user:app_group /app/img ./img
-COPY --from=builder --chown=app_user:app_group /app/js ./js
+COPY --chown=app_user:app_group ./package.json /app
+COPY --chown=app_user:app_group ./index.html /app
+COPY --chown=app_user:app_group ./css /app/css
+COPY --chown=app_user:app_group ./img /app/img
+COPY --chown=app_user:app_group ./js /app/js
+COPY --chown=app_user:app_group ./.npmrc /app
 
+RUN npm install 
 
 USER app_user
 
